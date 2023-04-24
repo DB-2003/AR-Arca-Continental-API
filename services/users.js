@@ -6,32 +6,29 @@ module.exports = {
     const pool = await dbService.poolPromise;
     const sql = `SELECT * FROM chofer`
     const result = await pool.request().query(sql);
-    console.log("––––––––RESULT––––––––––––", result)
+    console.log("", result)
     return result.recordset;
   },
 
-  loginUser: async (email, password) => {
-    console.log("mail: ", email, "Contra: ", password)
+  loginUser: async (email, clientPassword) => {
     const pool = await dbService.poolPromise;
     
-    sql = `SELECT id_desarrollador, contrasena
+    sql = `SELECT id_ingreso, contrasena, id_desarrollador, id_chofer, id_supervisor
                 FROM ingreso 
                 WHERE email='${email}' 
-                AND contrasena='${password}'`;
+                AND contrasena='${clientPassword}'`;
 
     const result = await pool.request().query(sql);
-    console.log("––––––––RESULT––––––––––––", result[0].recordset)
     return result.recordset;
   },
   
-  getDesarrollador: async (email) => {
+  getUserMail: async (email) => {
     const pool = await dbService.poolPromise;
-    sql = `SELECT id_desarrollador, nombre, apellido_paterno
-            FROM desarrollador
+    sql = `SELECT id_ingreso, id_desarrollador, id_chofer, id_supervisor
+            FROM ingreso
             WHERE email = '${email}'`;
-
     const result = await pool.request().query(sql);
-    console.log(result)
+    console.log("------ Query Response: ", result)
     return result.recordset;
   },
 

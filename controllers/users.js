@@ -5,52 +5,30 @@ const jwt = require("jsonwebtoken");
 const { poolPromise } = require("../config/db.js");
 
 module.exports = {
-  // loginUser: async (req, res, next) => {
-  //   console.log("login query");
-  //   const { email, clientPassword } = req.body;
 
-  //   try {
-  //     // 1. Verify if the user exists
-  //     const user = await UserServices.getDesarrollador(email);
-  //     console.log("-------User object: ---------", user)
+  getUserMail: async(req, res, next) => {
 
-  //     if (!user || user[0].length === 0) {
-  //       return res
-  //         .status(404)
-  //         .json({
-  //           message: "user not found",
-  //           success: false,
-  //           result,
-  //           found: false,
-  //         });
-  //     }
+    user = await UserServices.getUserMail(req.body.email)
 
-  //     try {
-  //       const session = await UserServices.loginUser(email, clientPassword);
-
-  //       return res
-  //         .status(200)
-  //         .json({ success: true, message: "Login successful", session });
-  //     } catch (error) {}
-  //   } catch (err) {
-  //     // 6. Handle any unexpected errors
-  //     return res.status(500).json({
-  //       message: "Error logging in",
-  //       success: false,
-  //       error: err.message,
-  //     });
-  //   }
-  // },
+    try {
+      return res.status(200).json(user);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: `Error al obtener el tema. Err: ${err}` });
+    }
+  },
 
   loginUser: async (req, res, next) => {
+
     const { email, clientPassword } = req.body;
-  
     try {
       // 1. Verify if the user exists
-      const user = await UserServices.getDesarrollador(email);
-      console.log("-------User object: ---------", user.length)
-  
+      const user = await UserServices.getUserMail(email);
+      console.log("------ Login Triggered: ", user, "\nUser length:", user.length)
+      
       if (user.length === 0) {
+        console.log("¡Response empty!")
         return res
           .status(404)
           .json({
@@ -61,8 +39,10 @@ module.exports = {
       }
   
       try {
+        console.log("Entra en segundo query")
         const session = await UserServices.loginUser(email, clientPassword);
-        console.log(session.contrasena)
+        console.log("Se hizo el segundo query")
+        console.log(session[0].contrasena)
         
         if (clientPassword == session[0].contrasena) {
           

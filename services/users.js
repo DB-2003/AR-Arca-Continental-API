@@ -2,6 +2,18 @@ const dbService = require("../config/db");
 
 module.exports = {
 
+  getUser: async()=>{
+    const pool = await dbService.poolPromise;
+
+    sql = `SELECT id_usuario, contrasena, rol
+            FROM ingreso 
+            WHERE email='${email}' 
+            AND contrasena='${clientPassword}'`;
+
+    const result = await pool.request().query(sql);
+    return result.recordset;
+  },
+
   getAllUsersQuery:  async () => {
     const pool = await dbService.poolPromise;
     const sql = `SELECT * FROM chofer`
@@ -13,10 +25,10 @@ module.exports = {
   loginUser: async (email, clientPassword) => {
     const pool = await dbService.poolPromise;
     
-    sql = `SELECT id_ingreso, contrasena, id_desarrollador, id_chofer, id_supervisor
-                FROM ingreso 
-                WHERE email='${email}' 
-                AND contrasena='${clientPassword}'`;
+    sql = `SELECT id_usuario, contrasena, rol
+            FROM ingreso 
+            WHERE email='${email}' 
+            AND contrasena='${clientPassword}'`;
 
     const result = await pool.request().query(sql);
     return result.recordset;
@@ -24,11 +36,10 @@ module.exports = {
   
   getUserMail: async (email) => {
     const pool = await dbService.poolPromise;
-    sql = `SELECT id_ingreso, id_desarrollador, id_chofer, id_supervisor
+    sql = `SELECT id_usuario
             FROM ingreso
             WHERE email = '${email}'`;
     const result = await pool.request().query(sql);
-    console.log("------ Query Response: ", result)
     return result.recordset;
   },
 

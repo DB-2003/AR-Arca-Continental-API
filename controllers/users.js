@@ -1,14 +1,11 @@
 const UserServices = require("../services/users.js");
-const { validateMexicoPhoneNumber } = require("../helpers/phoneUtils");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { poolPromise } = require("../config/db.js");
 
 module.exports = {
 
-  getUserMail: async(req, res, next) => {
-
-    user = await UserServices.getUserMail(req.body.email)
+  getUserInfo: async(req, res, next) => {
+    const userId = req.body;
+    user = await UserServices.getUser(userId);
+    
 
     try {
       return res.status(200).json(user);
@@ -23,37 +20,48 @@ module.exports = {
 
     const { email, clientPassword } = req.body;
     try {
-      // 1. Verify if the user exists
+
+      // Verificamos que hay cuerpo
+      if (!email || !clientPassword) {
+        return res
+          .status(400)
+          .json({ message: "Request incomplete", success: false });
+      }
+
+      // Llamamos el query para verificar que exista el usuarios y almacenamos respuesta en user
       const user = await UserServices.getUserMail(email);
-      console.log("------ Login Triggered: ", user, "\nUser length:", user.length)
       
+      // Si la respuesta llega vacia entonces no se encontró el usuario
       if (user.length === 0) {
-        console.log("¡Response empty!")
         return res
           .status(404)
           .json({
-            message: "user not found",
+            message: "User not found",
             success: false,
             found: false,
           });
       }
-  
+      
       try {
-        console.log("Entra en segundo query")
+        // Llamamos el query de login y almacenamos la respuesta en session
         const session = await UserServices.loginUser(email, clientPassword);
-        console.log("Se hizo el segundo query")
-        console.log(session[0].contrasena)
         
+        // Comparamos la contraseña del usuario con la contraseña de bases de datos
         if (clientPassword == session[0].contrasena) {
-          
-        }
-        return res
+          return res
           .status(200)
-          .json({ success: true, message: "Login successful", session });
-      } catch (error) {
-        return res
+          .json({ message: "Login successful", success: true, found: true, session: session[0] });
+        } else if(clientPassword != session[0]){
+          return res
           .status(401)
-          .json({ message: "Invalid password", success: false });
+          .json({ message: "Invalid password", success: false, found: true });
+        }
+        
+      } catch (error) {
+        // Manejo de errores externos
+        return res
+          .status(400)
+          .json({ message: "Something went wrong", success: false });
       }
     } catch (err) {
       // 6. Handle any unexpected errors

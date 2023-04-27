@@ -8,7 +8,7 @@ const specs = swaggerJsdoc(swagger.swaggerDocument);
 
 router.use('/users', require('./users.js'));
 router.use('/desarrollador', require('./desarrollador.js'));
+router.use('/admin', require('./admin.js'));
 router.use('/api-docs',swaggerUi.serve,swaggerUi.setup(specs));
-
 
 module.exports = router;

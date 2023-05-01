@@ -1,6 +1,20 @@
 const UserServices = require("../services/desarrollador");
 
 module.exports = {
+  getRefrigeradores: async(req, res, next)=>{
+    try {
+      const result = await UserServices.getRefrigeradores();
+      res.status(200).json({
+        success: true,
+        refrigeradores: result})
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Error retrieving freezers'
+      });
+    }
+  },
   insertSolicitud: async(req,res,next)=>{
     let {
       id_desarrollador,

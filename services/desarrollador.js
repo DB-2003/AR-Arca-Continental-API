@@ -1,6 +1,15 @@
 const dbService = require("../config/db");
 
 module.exports = {
+  getRefrigeradores: async ()=>{
+    const pool = await dbService.poolPromise;
+    sql = `SELECT *
+            FROM refrigerador
+            WHERE id_solicitud IS NULL;`;
+    const result = await pool.request().query(sql);
+    return result.recordset;
+  },
+
   getUser: async (clientId) => {
     const pool = await dbService.poolPromise;
     sql = `SELECT *
@@ -56,6 +65,5 @@ module.exports = {
     const result = await pool.request().query(sql);
     console.log("QUERY RESULT: ", result.recordset)
     return result.recordset;
-  },
-  
+  }
 };

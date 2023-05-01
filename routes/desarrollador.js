@@ -7,5 +7,6 @@ router.get('/datos/:id', UserControllers.getInfoDesarrollador)
 router.get('/datosSupervisores', UserControllers.getDatosSupervisor)
 router.get('/datosNegocios', UserControllers.getDatosNegocios)
 router.post('/crearSolicitud', UserControllers.insertSolicitud)
+router.get('/catalogoRefrigeradores', UserControllers.getRefrigeradores)
 
 module.exports = router; 

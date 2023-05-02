@@ -3,10 +3,9 @@ const UserServices = require("../services/users.js");
 module.exports = {
 
   getUserInfo: async(req, res, next) => {
-    const userId = req.body;
+    const userId = req.params.id;
     user = await UserServices.getUser(userId);
     
-
     try {
       return res.status(200).json(user);
     } catch (error) {

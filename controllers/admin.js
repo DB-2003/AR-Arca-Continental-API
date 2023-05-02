@@ -27,4 +27,34 @@ module.exports = {
         }
     },
 
+    getInfoSolicitud: async(req, res, next) => {
+      try {
+          var userId = req.params.id;
+          userId = parseInt(userId, 10)
+          user = await UserServices.getSolicitud(userId)
+          
+          return res.status(200).json(user);
+      } catch (error) {
+      return res
+          .status(500)
+          .json({ message: `Error al obtener el tema. Err:, ${error}` });
+      }
+    },
+
+    getInfoRefrigerador: async(req, res, next) => {
+      try {
+          var userId = req.params.id;
+          userId = parseInt(userId, 10)
+          var id_solicitud = req.params.id_solicitud
+          id_solicitud = parseInt(id_solicitud, 10)
+          user = await UserServices.getRefrigeradores(userId, id_solicitud)
+          
+          return res.status(200).json(user);
+      } catch (error) {
+      return res
+          .status(500)
+          .json({ message: `Error al obtener el tema. Err:, ${error}` });
+      }
+    },
+
 };

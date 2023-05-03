@@ -38,4 +38,13 @@ module.exports = {
     return result.recordset;
   },
 
+  getChofer: async()=>{
+    const pool = await dbService.poolPromise;
+    sql = `SELECT id_chofer, nombre, apellido_paterno
+      FROM chofer`;
+
+    const result = await pool.request().query(sql);
+    return result.recordset;
+  },
+
 };

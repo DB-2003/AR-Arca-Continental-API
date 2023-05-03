@@ -26,7 +26,16 @@ module.exports = {
             success: false,
             found: false,
           });
-      }
+        }
+
+      return res.status(200).json(user);
+
+      } catch (error) {
+        return res
+            .status(500)
+            .json({ message: `Error al obtener la informacion. Err:, ${error}` });
+        }
+      },
 
     getInfoSolicitud: async(req, res, next) => {
       try {
@@ -55,6 +64,18 @@ module.exports = {
       return res
           .status(500)
           .json({ message: `Error al obtener el refrigerador. Err:, ${error}` });
+      }
+    },
+
+    getInfoChofer: async(req, res, next) => {
+      try {
+          user = await UserServices.getChofer()
+          
+          return res.status(200).json(user);
+      } catch (error) {
+      return res
+          .status(500)
+          .json({ message: `Error al obtener la informacion del chofer. Err:, ${error}` });
       }
     },
 };

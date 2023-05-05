@@ -73,7 +73,6 @@ module.exports = {
     }
   },
   
-
   getAllUsers: async (req, res, next) => {
     try {
       users = await UserServices.getAllUsersQuery();

@@ -27,6 +27,12 @@ module.exports = {
             found: false,
           });
       }
+    }catch(error){
+        return res
+        .status(500)
+        .json({ message: `Error al obtener la solicitud. Err:, ${error}` });
+    }
+    },
 
     getInfoSolicitud: async(req, res, next) => {
       try {

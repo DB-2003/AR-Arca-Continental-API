@@ -36,6 +36,13 @@ module.exports = {
             .json({ message: `Error al obtener la informacion. Err:, ${error}` });
         }
       },
+      }
+    }catch(error){
+        return res
+        .status(500)
+        .json({ message: `Error al obtener la solicitud. Err:, ${error}` });
+    }
+    },
 
     getInfoSolicitud: async(req, res, next) => {
       try {

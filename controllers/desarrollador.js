@@ -1,6 +1,91 @@
 const UserServices = require("../services/desarrollador");
 
 module.exports = {
+
+  getRecentRequestsRefris: async(req, res) =>{
+    const {id_solicitud} = req.body;
+    try {
+      const refrigeradores = await UserServices.getRecentRequestsRefris(id_solicitud)
+      res.status(200).json({refrigeradores});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Error getting recent checklist'
+      });
+    }
+  },
+  getRecentRequests: async(req, res) =>{
+    const {id_desarrollador} = req.body;
+    try {
+      const solicitudes = await UserServices.getRecentRequests(id_desarrollador)
+      res.status(200).json({solicitudes});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Error getting recent checklist'
+      });
+    }
+  },
+  updateCheckList: async(req, res, next)=>{
+    try {
+      const { refrigeradores } = req.body;
+      const { length } = refrigeradores;
+      
+      console.log("REQUEST: ", refrigeradores)
+      // Loop through each refrigerador and call UserServices.updateCheckList() for each
+      for (let i = 0; i < length; i++) {
+        const refrigerador = refrigeradores[i];
+        const { id_checkListRefrigerador, entrada, movimientos, equipo } = refrigerador;
+        
+        await UserServices.updateCheckList(id_checkListRefrigerador, entrada, movimientos, equipo);
+        console.log(`Object with id ${id_checkListRefrigerador} updated successfully`);
+      }
+      
+      res.status(200).json({
+        success: true,
+        message: 'Checklist updated successfully'
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Error updating checklist'
+      });
+    }
+  },
+  
+
+  getCheckList: async(req,res,next)=>{
+    try {
+      const {refrigeradores} = req.body;
+      const checkLists = await UserServices.getCheckList(refrigeradores)
+      res.status(200).json({checkLists});
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: 'Error retrieving freezers'
+      });
+    }
+  },
+  updateRefrigeradores: async(req,res,nex)=>{
+    try {
+      const { id_solicitud, refrigeradores } = req.body;
+      let updatedRefrigeradores = await UserServices.updateRefrigeradores(id_solicitud ,refrigeradores)
+      res.status(200).json({
+        success: true,
+        refrigeradores: updatedRefrigeradores})
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Error retrieving freezers'
+      });
+    }
+  },
   getRefrigeradores: async(req, res, next)=>{
     try {
       const result = await UserServices.getRefrigeradores();
@@ -49,9 +134,7 @@ module.exports = {
 
       res.status(200).json({
         success: true,
-        result: data[0]
-
-        // id_solicitud,
+        id_solicitud: data[0].id_solicitud
       })
     } catch (error) {
       // handle any errors that occur during the try block

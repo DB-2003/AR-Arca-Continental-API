@@ -48,7 +48,7 @@ module.exports = {
                   id_supervisor, 
                   id_negocio, 
                   imagen_evidencia,
-                  comentarios,
+                  comentarios_admin,
                   estatus, 
                   fecha_generada, 
                   cedi)
@@ -142,7 +142,7 @@ module.exports = {
 
   getRecentRequests: async(id_desarrollador)=>{
     const pool = await dbService.poolPromise;
-    sql = `SELECT s.id_solicitud, s.id_desarrollador, s.id_supervisor, s.id_chofer, s.id_negocio, s.imagen_evidencia, s.comentarios, s.estatus, s.es_aprobado, s.fecha_generada, s.fecha_instalacion, s.fecha_aprobado, s.cedi,
+    sql = `SELECT s.id_solicitud, s.id_desarrollador, s.id_supervisor, s.id_chofer, s.id_negocio, s.imagen_evidencia, s.estatus, s.es_aprobado, s.fecha_generada, s.fecha_instalacion, s.fecha_aprobado, s.cedi,
             n.id_cliente, n.nombre_tienda, n.tamano, n.cantidad_refrigeradores, n.cantidad_total_puertas, n.calle, n.num_externo, n.colonia
             FROM solicitud s
             JOIN negocio n ON s.id_negocio = n.id_negocio

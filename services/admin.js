@@ -19,7 +19,7 @@ module.exports = {
             JOIN supervisor SU ON SU.id_supervisor = S.id_supervisor 
             JOIN negocio N ON N.id_negocio = S.id_negocio
             JOIN desarrollador D ON D.id_desarrollador = S.id_desarrollador
-            WHERE S.id_supervisor = ${clientId} AND estatus = 'Pendiente'`;
+            WHERE S.id_supervisor = ${clientId} AND estatus = 'Por Confirmar'`;
 
     const result = await pool.request().query(sql);
     return result.recordset;
@@ -31,7 +31,7 @@ module.exports = {
       FROM refrigerador R
       JOIN solicitud S ON R.id_solicitud = S.id_solicitud
       JOIN supervisor SU ON SU.id_supervisor = S.id_supervisor
-      WHERE S.id_supervisor = ${clientId} AND estatus = 'Pendiente' AND R.id_solicitud = ${id_solicitud}
+      WHERE S.id_supervisor = ${clientId} AND estatus = 'Por Confirmar' AND R.id_solicitud = ${id_solicitud}
       GROUP BY modelo, codigo_serie`;
 
     const result = await pool.request().query(sql);
@@ -53,7 +53,7 @@ module.exports = {
     FROM solicitud S
     JOIN supervisor SU ON SU.id_supervisor = S.id_supervisor
     JOIN negocio N ON N.id_negocio = S.id_negocio
-    WHERE S.id_supervisor = ${id} AND estatus = 'Pendiente' AND S.id_solicitud = ${id_solicitud}`;
+    WHERE S.id_supervisor = ${id} AND estatus = 'Por Confirmar' AND S.id_solicitud = ${id_solicitud}`;
 
     const result = await pool.request().query(sql);
     return result.recordset;
